@@ -83,3 +83,7 @@ RUN chmod 4777 binaries
 
 COPY docker-files/start.sh ./
 RUN chmod 4777 start.sh
+
+RUN apt-get install -y fonts-noto-cjk language-pack-zh-hans
+RUN locale-gen zh_TW.UTF-8  
+ENV LC_ALL=zh_TW.UTF-8
