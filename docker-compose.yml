@@ -1,0 +1,27 @@
+# docker-Specify the compose version
+version: "3"
+
+services:
+  app:
+    #Build a Dockerfile in the same directory
+    build: .
+    #Give the container a name(Any)
+    #container_name: YTdlg2
+    # https://stackoverflow.com/a/71027261
+    user: ${MY_UID}:${MY_GID}
+    #You can keep the container running.
+    tty: true
+    #Mount the files in the directory to the app directory in the container
+    volumes:
+        - /tmp/.X11-unix:/tmp/.X11-unix
+        - /etc/localtime:/etc/localtime:ro
+        - ~/Downloads/:/home/node
+    environment:
+      - DISPLAY=${DISPLAY}
+      - TZ=${TZ}
+      - LANG=zh_TW.UTF-8
+    #Mount port 1000 on the container side to port 8080 on the host side.
+    #ports:
+    #  - "8080:8080"
+    # https://docs.docker.com/compose/compose-file/compose-file-v3/
+    privileged: true
