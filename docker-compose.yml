@@ -15,8 +15,8 @@ services:
     volumes:
         - /tmp/.X11-unix:/tmp/.X11-unix
         - /etc/localtime:/etc/localtime:ro
-        - ~/Downloads/:/home/node
-        - ~/.Xauthority:/home/node/.Xauthority
+        - ./downloads/:/home/user
+        - ~/.Xauthority:/home/user/.Xauthority
     environment:
       - DISPLAY=${DISPLAY}
       - TZ=${TZ}
@@ -24,6 +24,8 @@ services:
       - XMODIFIERS=${XMODIFIERS}
       - QT_IM_MODULE=${QT_IM_MODULE}
       - GTK_IM_MODULE=${GTK_IM_MODULE}
+      - AUDIO_ID=${AUDIO_ID}
+      - VIDEO_GID=${VIDEO_GID}
       #- XMODIFIERS="@im=fcitx"
       #- QT_IM_MODULE=fcitx5
       #- GTK_IM_MODULE=fcitx
