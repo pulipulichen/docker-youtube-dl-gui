@@ -1,9 +1,40 @@
-#Specify the version of nodejs.
-FROM node:16.14.0
+# https://linuxtut.com/en/12060150fad1616e37a0/#fromHistory
+
+FROM ubuntu:20.04
+
+# ***********************************************
+# install packages for xrdp, and do setting
+# ***********************************************
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    language-pack-zh* fonts-noto-cjk fcitx-mozc \
+    && im-config -n fcitx
+# RUN apt-get install fonts-arphic-ukai fonts-arphic-uming fonts-ipafont-mincho fonts-ipafont-gothic fonts-unfonts-core -y
+
+#Install GUI application for operation check
+#RUN apt-get update \
+#    && apt-get install -y gedit
+
+#ENV GTK_IM_MODULE=xim \
+#    QT_IM_MODULE=fcitx \
+#    XMODIFIERS=@im=fcitx \
+#    DefalutIMModule=fcitx
+
+RUN locale-gen zh_TW.UTF-8  
+ENV LANG=zh_TW.UTF-8 \
+    LC_ALL=zh_TW.UTF-8
+
+# -------------------
 
 #Install required packages in os(It is recommended to write it as a spell)
-RUN apt-get update
-RUN apt-get install git -y
+#RUN apt-get update
+RUN apt-get install git curl -y
+
+# https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubuntu-20-04
+RUN cd /tmp
+RUN curl -sL https://deb.nodesource.com/setup_16.x -o nodesource_setup.sh
+RUN bash nodesource_setup.sh
+RUN apt install nodejs -y
 
 #Creating an applicadtion directory
 RUN mkdir /app
@@ -24,16 +55,25 @@ RUN apt-get install gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups
 RUN npm install -g npm@8.5.3
 RUN npm install electron -g
 
-# https://github.com/electron/electron/issues/17972#issuecomment-487369441
-RUN apt-get install sudo -y
-RUN chown root /usr/local/lib/node_modules/electron/dist/chrome-sandbox
-RUN chmod 4755 /usr/local/lib/node_modules/electron/dist/chrome-sandbox
-
 RUN mkdir -p binaries
+COPY docker-files/binaries/* ./binaries/
 RUN chmod 4777 binaries
+
+COPY docker-files/start.sh ./
+RUN chmod 4777 start.sh
+
+# https://github.com/electron/electron/issues/17972#issuecomment-487369441
+#RUN apt-get install sudo -y
+#RUN chown root /usr/local/lib/node_modules/electron/dist/chrome-sandbox
+#RUN chmod 4755 /usr/local/lib/node_modules/electron/dist/chrome-sandbox
+
+# https://unix.stackexchange.com/a/548473/491238
+#RUN apt-get install fonts-arphic-ukai fonts-arphic-uming fonts-ipafont-mincho fonts-ipafont-gothic fonts-unfonts-core -y
 
 #RUN apt-get install language-pack-zh-hans -y
 #RUN dpkg-reconfigure locales
 
 #CMD ["npm", "run","start"]
-CMD ["electron", ".", "--no-sandbox"]
+#CMD ["electron", ".", "--no-sandbox"]
+
+RUN useradd -m node

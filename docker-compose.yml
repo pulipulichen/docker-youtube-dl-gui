@@ -16,10 +16,17 @@ services:
         - /tmp/.X11-unix:/tmp/.X11-unix
         - /etc/localtime:/etc/localtime:ro
         - ~/Downloads/:/home/node
+        - ~/.Xauthority:/home/node/.Xauthority
     environment:
       - DISPLAY=${DISPLAY}
       - TZ=${TZ}
-      - LANG=zh_TW.UTF-8
+      - LANG=${LANG}
+      - XMODIFIERS=${XMODIFIERS}
+      - QT_IM_MODULE=${QT_IM_MODULE}
+      - GTK_IM_MODULE=${GTK_IM_MODULE}
+      #- XMODIFIERS="@im=fcitx"
+      #- QT_IM_MODULE=fcitx5
+      #- GTK_IM_MODULE=fcitx
     #Mount port 1000 on the container side to port 8080 on the host side.
     #ports:
     #  - "8080:8080"
