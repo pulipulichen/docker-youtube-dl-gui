@@ -10,7 +10,7 @@ export GTK_IM_MODULE=$GTK_IM_MODULE
 export AUDIO_ID=`getent group audio | cut -d: -f3`
 export VIDEO_GID=`getent group video | cut -d: -f3`
 
-docker-compose run app bash
+#docker-compose run app bash
 #docker-compose up
-#docker-compose run app bash ./start.sh
+docker-compose run app bash ./start.sh
 
